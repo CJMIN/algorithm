@@ -152,6 +152,7 @@ sorted_list=sorted(student_list, key=lambda tuple_data : tuple_data[1], reverse=
 
 
 '''
+
 두 배열의 원소 교체 설계
 
 문제 :
