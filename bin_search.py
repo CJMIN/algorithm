@@ -91,17 +91,120 @@ set() 함수는 집합 자료형을 초기화할 때 사용한다.
 
 
 '''
+ 
 
+떡볶이 떡 만들기 설계
+
+문제 :
+떡볶이 떡의 길이는 일정하지 않는데 한봉지에 들어가는 떡의 총길이를 절단기로 잘라서 맞춘다.
+손님이 가져가는 떡의 길이 = (떡의 길이 - 절단기의 길이)을 N개의 떡개수 만큼 반복한 것의 합
+손님이 요청한 길이가 M일때 적어도 M만큼의 떡을 얻기 위해
+절단기에 설정할 수 있는 높이의 최대값을 구하는 프로그램을 작성하시오
+
+입력 :
+1.떡의 개수 N [1,100만], 요청한 길이 M [1,20억]
+2.N개 떡의 개별 높이 입력 , 떡의 길이 범위[0,10억]
+
+
+출력 : 절단기 높이의 최대값
+
+ 
+
+
+
+아이디어 :
+
+범위가 크므로 이진탐새을하기위해 리스트를 정렬한다.(2000만번)
+이진탐색 연산은 log10억=약 30 그리고
+손님이 가져가는 떡의 길이를 구하기 위해여 약 100만 원소를 빼고 더하는 연산을 하므로 약 100만번
+대략적으로 30*100만 = 3000만 이므로 10억 보다 작다. 따라서 시간초과가 나지 않는다.
+
+
+
+설계:
+
+1. 입력받기
+2. 떡의 길이의 정보를 담은 리스트를 정렬한다. (2000만번 연산)
+3. 떡의 길이 리스트와 절단기의 길이를 인자로 받고 손님이 가져가는 떡의 길이를 반환하는 함수 구현하기
+4. 이진탐색 함수 구현하기 (인자 : 떡의 길이 리스트,손님이 요청한 떡의 길이, start, end) (반환값 : 최대 절단기 길이)
+
+(기저 조건 경우의 수 잘세서 구현하기)
+5. 출력하기
+
+
+
+내가 구현한 코드 :
+
+import sys
+
+n,m=map(int,input().split())
+n_list=list(map(int,sys.stdin.readline().split()))
+
+n_list.sort()
+
+
+def return_ricecake(n_list,h):
+    sum=0
+    for i in range(len(n_list)):
+        piece=n_list[i] - h
+        if piece>0:
+            sum+=piece
+    return sum
+
+start=0
+end=n_list[len(n_list)-1]
+
+
+def bin_search(n_list,target,start,end):
+    mid=(start+end)//2
+
+    if start>end:
+        while True:
+
+            start -= 1
+            end += 1
+
+            if return_ricecake(n_list,start)>target and return_ricecake(n_list,start+1)<target :
+                return start
+            elif return_ricecake(n_list,end-1)>target and return_ricecake(n_list,end)<target :
+                return end-1
+
+    if return_ricecake(n_list,mid) > target :
+        return bin_search(n_list,target,mid+1,end)
+    elif return_ricecake(n_list,mid) < target :
+        return bin_search(n_list,target,start,mid-1)
+    else:
+        return mid
+
+H=bin_search(n_list,m,start,end)
+print(H)
+
+
+피드백 :
+
+항상 10억번 연산이 시간초과의 기준이 아닌가보다.
+
+1초에 몇 번 연산이 파이썬에서 리미트인지 알아봐야겠다.
+
+1초에 2000만번 연산이라고 생각하면 좋을 것 같다.고 한다.
+
+따라서 2초이므로 4000만번이기 때문에 저자는 아슬아슬하다고 했다.
+
+ 
+
+저자는 일반적으로 파라메트릭 서치 문제 유형은 이진 탐색을 재귀적으로 구현하지 않고
+
+반복문으로 이용해 구현하면 더 간결하게 문제를 풀 수 있다고 한다.
+
+ 
+
+재귀로 풀면 기저 조건이 고려해야할 경우의 수가 많아지므로 휴먼에러가 발생할 수 있을 것 같다.
+
+ 
+
+이진 탐색을 구현하는 두 가지 방법이 쓰이는 곳이 다양하므로
+
+재귀적인 구현방법과 반복적인 구현방법을 모두 암기하고 있어야겠다.
 
 '''
-
-
-
-
-
-
-
-
-
-
 
