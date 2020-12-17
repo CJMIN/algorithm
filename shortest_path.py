@@ -321,7 +321,27 @@ Test Case:
 
 피드백 :
 
+input=sys.stdin.readline().rstrip 이렇게 쓰면 오류가 나서
 
+input=sys.stdin.readline 이렇게 변경하니 오류가 없어졌다. 참고하자
+
+
+
+나는 리스트를 인자로 넘기면 call by value 이라고 착각하고 있었는데
+
+결과적으로는 call by reference였다.
+
+따라서 해당 인자에 들어가야하는 값인 shortest_list와 visited를 하나씩 더 만들었다.
+
+파이썬에서 인자 값은 정확하게는 call by object reference라고 한다.
+
+인자로 어떤 값이 들어가는지에 따라 call by value인지 call by reference인지 결정되는 것 같다.
+
+어떤 형태의 인자가  어디에 해당되는지는 아래 블로그를 참고하자
+
+
+www.pymoon.com/entry/Python-%EC%9D%80-callbyvalue-%EC%9D%BC%EA%B9%8C-callbyreference-%EC%9D%BC%EA%B9%8C
+developer-alle.tistory.com/339
 
 '''
 
