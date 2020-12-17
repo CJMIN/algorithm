@@ -346,6 +346,33 @@ developer-alle.tistory.com/339
 '''
 
 
+'''
+
+전보
+
+문제 :
+
+N개의 도시가 있다.
+
+도시 x에서 도시 y로 전보를 보내고자 한다면
+
+도시 x에서 도시 y로 향하는 통로가 설치되어 있어야 한다.
+
+
+
+x에서 y 통로만 있고 , y에서 x 통로가 없다면 y에서 x로는 전보를 보낼 수 없다.
+
+
+
+통로를 거쳐 메세지를 보낼 경우 일정 시간이 소요된다.
+
+
+
+c도시에서 위급상황이 발생되어 최대한 많은 도시로 메세지를 보냈을 때
+
+메세지를 받은 도시의 개수와 
+
+도시들이 모두 메세지를 받을때까지 걸리는 시간을 출력하는 프로그램을 작성하라
 
 
 
@@ -355,9 +382,186 @@ developer-alle.tistory.com/339
 
 
 
+입력 :
+
+1. N M C
+
+도시의 개수, 통로의 개수, 메세지를 보내고자하는 도시
+
+[1,30000] [1,200000] [1,N]
+
+2~M+1. X Y Z
+
+z [1,1000]
 
 
 
+
+
+
+
+출력 :
+
+메세지를받은도시의총개수  총걸린시간
+
+
+
+
+
+
+
+아이디어 :
+
+다익스트라를 이용하여 각 노드의 최단거리를 갱신하고
+
+INF가 아닌 원소의 수를 계산하고
+
+INF를 모두 -1로 초기화한 후에
+
+MAX함수를 이용하여 가장 오래 걸린 시간을 출력한다.
+
+
+
+
+
+
+
+설계 :
+
+1. 입력 받기
+
+2. 최소 거리 갱신 리스트 구현하기
+
+3. 방문 체크 리스트 구현하기
+
+4. 초기값 변수 선언하기
+
+
+
+. 다익스트라 알고리즘 함수 구현하기
+
+. INF인 원소를 index함수를 이용해 찾아내고 -1로 초기화 시키기 INF가 없을떄까지 반복하면 카운트세기
+
+(이때 -1 해줘야 한다.)
+
+. MAX함수를 이용하여 최대 시간 구하기
+
+.카운트와 최대시간 출력하기
+
+
+
+
+
+내가 구현한 코드 :
+
+import sys
+import heapq
+input=sys.stdin.readline
+
+INF=int(1e9)
+
+n,m,c=map(int,input().split())
+
+graph=[]
+
+for _ in range(m):
+    temp=list(map(int,input().split()))
+    graph.append(temp)
+
+shortest_list=[INF for _ in range(n+1)]
+shortest_list[c]=0
+
+visited=[False for _ in range(n+1)]
+
+start_city=c
+
+
+def dijkstra(start):
+
+    pri_q=[]
+    heapq.heappush(pri_q,[0,start])
+
+    while pri_q:
+
+        temp=heapq.heappop(pri_q)
+
+        shortest_len=temp[0]
+        shortest_node=temp[1]
+
+        for i in graph:
+
+            start_node=i[0]
+            end_node=i[1]
+            s_len=i[2]
+
+            if start_node != shortest_node:
+                continue
+
+            if visited[start_node]==True:
+                continue
+
+            if shortest_list[end_node] > shortest_len + s_len:
+                shortest_list[end_node] = shortest_len + s_len
+                heapq.heappush(pri_q,[shortest_list[end_node],end_node])
+        visited[shortest_node]=True
+    return 0
+
+dijkstra(start_city)
+
+count=0
+while True:
+    if max(shortest_list)!=INF:
+        break
+    index=shortest_list.index(INF)
+    shortest_list[index]=-1
+    count+=1
+
+the_num_of_city=len(shortest_list)-(count+1)
+max_len=max(shortest_list)
+
+print(the_num_of_city,max_len)
+
+
+
+Test Case :
+
+
+
+9 24 1 
+1 2 1 
+1 4 1 
+1 5 1 
+2 1 1 
+2 3 2 
+2 5 2 
+3 2 2 
+3 5 2 
+4 1 1 
+4 5 2 
+4 7 2 
+5 1 1 
+5 2 2 
+5 3 2 
+5 4 2 
+5 6 2 
+5 8 2 
+6 5 2 
+6 8 3 
+6 9 3 
+7 4 2 
+8 5 2 
+8 6 3 
+9 6 3 
+
+결과 값 : 8 6
+
+피드백 : 
+
+n과 m이 충분히 크므로 O(n^3)의 시간복잡도를 가진 플로이드 워셜 알고리즘은 불가능하다 따라서
+
+다익스트라 알고리즘을 사용하여야 한다.
+
+'''
 
 
 
