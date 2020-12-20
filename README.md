@@ -1,5 +1,7 @@
 
-![ㄴㄴㅇ](https://user-images.githubusercontent.com/46758264/102620790-eac07480-4181-11eb-874b-237b6c3e749c.JPG)
+![ㅇ](https://user-images.githubusercontent.com/46758264/102708148-19eef700-42e4-11eb-9d56-2503132788c9.JPG)
+
+
 
 
 ## 0. 코딩 테스트 개요
