@@ -40,15 +40,10 @@
 설계 :
 
 1. 입력 받기
-
 2. 노드의 부모 노드를 가리키는 리스트 만들기 (해당 노드의 번호를 리스트의 인덱스로 설정하기)
-
 3. 부모 노드를 가리키는 리스트의 초기화는 INF로 설정하기
-
 4. 루트 노드를 반환하는 함수 구현하기
-
 5. 루트 A와 루트 B가 중에 더 작은 함수가 부모노드가 되도록 하는 합치기 연산 구현하기
-
 6. 출력하기
 
 
@@ -143,7 +138,6 @@ print(parent_list)
 입력 :
 
 1. 노드개수 , 간선 개수
-
 2~. 간선정보(가중치.노드1,노드2)
 
 
@@ -151,7 +145,6 @@ print(parent_list)
 출력 :
 
 부모 노드 리스트 출력
-
 간선정보의 합 출력
 
 
@@ -161,13 +154,9 @@ print(parent_list)
 아이디어 :
 
 간선들의 정보를 오름차순으로 정렬하고
-
 작은 간선부터 차례대로 선택하여 사이클을 생성하는지
-
 서로소 집합자료구조를 이용하여 확인하고
-
 사이클을 생성하지 않는다면 해당 간선을 포함시킨다.
-
 모든 간선에 대해서 확인한다.
 
 
@@ -175,13 +164,9 @@ print(parent_list)
 설계 :
 
 1. 입력받기
-
 2. 간선들의 정보를 오름차순으로 정렬하기
-
 3. 서로소 집합 자료구조 연산 2가지 함수 구현하기
-
 4. 서로소 집합 연산을 이용하여 사이클을 생성하는지 확인하는 함수 구현하기
-
 5. 모든 간선들에 대하여 사이클을 생성하는지 확인하고 사이클을 생성하지 않는다면 집합에 추가하는 것을 반복한다.
 
 
@@ -345,9 +330,99 @@ print(order_list)
 '''
 
 
+'''
+
+
+팀 결성
+
+
+문제 : 
+
+학생들에게 0번부터 N+1번까지 번호를 부여했다.
+처음에는 모든 학생들이 서로다른 팀으로 구별되어 총 N+1개의 팀이 존재한다.
+팀 합치기 연산과
+같은 팀 여부 확인 연산이 존재한다.
+M개의 연산이 수행되는데 이중에 같은 팀 여부를 확인하는 연산의 결과만 출력하는 프로그램을 작성하여라
 
 
 
+입력 :
+1. N M [1,  100,000]
+2~. 연산종류(0,1) 학생1 학생2
+
+
+
+출력 :
+같은 팀 확인 여부를 YES와 NO로 출력하기
+
+
+
+아이디어 :
+서로소 집합 자료구조를 이용하면 될 것 같다.
+
+
+
+설계 :
+# 1. 입력받기
+# 2. 부모 노드를 저장하기위한 리스트 선언하기
+# 3. 루트노드 출력하는 함수 구현하기
+# 4. 합치기 연산 함수 구현하기
+# 5. 같은 팀 여부 확인하는 함수 구현하기 (반환 YES NO)
+# 6. 해당연산에 맞는 연산 수행하기
+
+
+
+내가 구현한 코드 :
+
+import sys
+input=sys.stdin.readline
+N,M=map(int,input().rstrip().split())
+
+cal_info=[]
+
+
+
+for i in range(M):
+    temp=list(map(int,input().rstrip().split()))
+    cal_info.append(temp)
+
+parent_list=[i for i in range(N+1)]
+
+
+
+def return_root(parent_list, node):
+
+    if parent_list[node]!=node:
+        parent_list[node]=return_root(parent_list,parent_list[node])
+    return  parent_list[node]
+
+
+
+def union_cal(parent_list,node1,node2):
+
+    if return_root(parent_list,node1)<return_root(parent_list,node2):
+        parent_list[return_root(parent_list,node2)]=return_root(parent_list,node1)
+    elif return_root(parent_list,node2)<return_root(parent_list,node1):
+        parent_list[return_root(parent_list,node1)]=return_root(parent_list,node2)
+    else :
+        return 0
+
+def check_team(parent_list,node1,node2):
+
+    if return_root(parent_list,node1)==return_root(parent_list,node2):
+        print("YES")
+    else :
+        print("NO")
+
+
+
+for i in cal_info:
+
+    if i[0]==0:
+        union_cal(parent_list,i[1],i[2])
+    elif i[0]==1:
+        check_team(parent_list,i[1],i[2])
+'''
 
 
 
