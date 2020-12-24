@@ -428,6 +428,128 @@ for i in cal_info:
 
 
 
+'''
+
+도시 분할 계획
+
+문제 : 
+
+마을은 N개의 집과 집들을 연결하는 M개의 길로 이루어져있다.
+무방향이다.
+길에는 가중치가 존재한다.
+마을을 2개의 분리된 마을로 분할하려고 한다.
+마을을 분할할때는 집들이 서로 연결되도록 분할해야한다.
+그리고 마을에는 집이 최소 한개 이상 있어야한다.
+
+마을을 분리시킨후 필요없는 길은 없앤다.
+분리된 마을안에서도 분리된 임의의 두 집 사이에 경로가 항상 존재하게 하면서 길을 더 없앨 수 있다.
+(길이 연결만 된다면 최적화 시켜도 된다는 말)
+
+이 조건들을 만족하면서 존재하는 길의 가중치의 합을 최소로 하게하는 프로그램을 작성하라.
+
+
+
+
+입력 :
+
+1. 집의 개수 N [2,  100,000], 길의 개수 M [1,   1,000,000]
+2~.집1 집2 가중치
+
+
+
+
+출력 :
+
+마을을 분리시키고 길을 없애고 남은 길들의 가중치의 합
+
+
+
+
+아이디어 : 
+
+크루스칼 알고리즘을 이용하여 모든 노드를 이은 간선의 가중치들의 합에서 가장 큰 가중치를 빼면 될 것 같다.
+
+
+
+
+설계 : 
+
+1. 입력받기
+2. 가중치 정렬하기
+3. 서로소 집합 자료구조 연산 2개 함수로 만들기
+
+  (1) 루트 노드 반환하는 함수
+  (2) 합치기 함수(사이클 확인 가능)
+
+4. 크루스칼 알고리즘 구현
+5. 간선들의 합에 가장 큰 간선을 뺀 값을 출력하기
+
+
+
+
+
+
+
+내가 구현한 코드 : 
+
+import sys
+
+input=sys.stdin.readline
+
+N,M=map(int, input().rstrip().split())
+
+graph_info=[]
+
+
+for i in range(M):
+
+    node1,node2,weight=map(int,input().rstrip().split())
+    graph_info.append([weight,node1,node2])
+
+
+graph_info.sort()
+
+parent_list=[i for i in range(N+1)]
+
+def return_root(parent_list,node):
+
+    if parent_list[node]!=node:
+        parent_list[node]=return_root(parent_list,parent_list[node])
+    return parent_list[node]
+
+def union(parent_list,node1,node2):
+
+    if return_root(parent_list,node1)<return_root(parent_list,node2):
+        parent_list[return_root(parent_list,node2)] = return_root(parent_list,node1)
+        return True
+    elif return_root(parent_list,node1)>return_root(parent_list,node2):
+        parent_list[return_root(parent_list,node1)] = return_root(parent_list,node2)
+        return True
+    else:
+        return False
+
+max = 0
+sum=0
+
+for i in graph_info:
+
+    flag=union(parent_list,i[1],i[2])
+
+    if flag:
+        if max < i[0]:
+            max = i[0]
+        sum+=i[0]
+
+
+print(sum-max)
+
+
+'''
+
+
+
+
+
 
 
 
