@@ -24,7 +24,7 @@
 
 [개념](https://to-remember-for-100-years.tistory.com/38)
 
-[코드]
+[코드](https://github.com/CJMIN/algorithm/blob/master/dfs_bfs.py)
 
 ## 4. 정렬
 
