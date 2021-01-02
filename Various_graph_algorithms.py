@@ -547,6 +547,249 @@ print(sum-max)
 '''
 
 
+'''
+
+커리큘럼
+ 
+문제 :
+
+각 온라인 강의는 선수 강의가 있을 수 있는데,
+
+선수 강의가 있는 강의는 선수강의를 먼저 들어야만 해당 강의를 들을 수 있다.
+ 
+총 N개의 강의를 듣고자 한다. 
+
+모든 강의는 1번부터 N번까지의 번호를 가진다.
+
+또한 동시에 여러 개의 강의를 들을 수 있다고 가정한다.
+
+N개의 강의 정보가 주어졌을때 N개의 강의에 대하여
+
+수강하기까지 걸리는 최소 시간을 각각 출력하는 프로그램을 작성하시오
+
+ 
+ 
+
+입력 :
+
+1. 듣고자하는 강의의 수 [1,   500]
+
+2~.각 강의 시간[1,   100,000], 선수 강의 번호들 , -1 (정보의 순서가 강의 번호이다.)  
+
+ 
+
+
+출력 :
+
+1~N. 각 강의를 수강하는데 걸리는 최소 시간을 각 줄에 출력한다.
+
+
+ 
+
+아이디어 :
+
+위상정렬 알고리즘을 이용하여 선수 과목에 대한 처리를 하면 될 것 같다.
+
+어차피 선수과목을 다수강해야 들을 수 있기 때문에 선수과목 수강 여부만 파악하면 된다.
+
+선수과목들의 최소 시간을 저장하기위한 연결리스트를 생성하자
+
+ 
+
+
+설계 :
+
+1. 과목 수를 입력받는다. 
+
+2. 과목에 대한 정보를 연결리스트a에 입력받는다.
+
+3. 과목을 수강했는지 체크할 체크리스트b를 만든다.
+
+4. 과목의 수강시간을 저장할 리스트c를 만든다.
+
+5. 선수 과목들의 최소 시간을 저장할 연결리스트d를 만든다.
+
+6. result 결과를 저장할 리스트e를 만든다.
+
+
+7. 연결리스트의 인덱스의 길이가 0인 것과 체크리스트를 이용하여 인접차수가 0인 과목A를 찾는다.
+
+8. 체크리스트에서 과목A를 체크한다.
+
+9. 과목A의 최소 시간을 연결리스트d의 정보와 리스트c의 정보를 합하여 리스트e에 저장한다.
+
+10. 연결리스트a에서 과목A의 정보를 지운다.
+
+11. 과목A의 최소 시간을 지웠던 연결리스트d의 인덱스에 저장한다.   
+
+12. 체크리스트가 모두 체크될때까지 7번부터 반복한다.
+
+ 
+
+
+내가 구현한 코드 :
+
+import sys
+input_sys=sys.stdin.readline
+
+# 1. 과목 수를 입력받는다. 
+N= int(input())
+
+# 2. 과목에 대한 정보를 입력받기 위한 연결리스트a를 만든다.
+input_graph=[[] for i in range(N+1)]
+
+# 3. 과목을 수강했는지 체크할 체크리스트b를 만든다.
+check_list=[0 for i in range(N+1)]
+check_list[0]=1
+
+# 4. 과목의 수강시간을 저장할 리스트c를 만든다.
+time_list=[0 for i in range(N+1)]
+
+# 5. 선수 과목들의 최소 시간을 저장할 연결리스트d를 만든다.
+find_min_list=[[] for i in range(N+1)]
+
+# 6. result 결과를 저장할 리스트e를 만든다.
+result_time_list=[0 for i in range(N+1)]
+
+#.7 과목에 대한 정보를 연결리스트a에 입력받는다.
+for i in range(1,N+1):
+    temp=list(map(int,input_sys().rstrip().split()))
+    time_list[i]=temp.pop(0) # 8. 과목의 수강시간을 리스트c에 저장한다.
+
+    for j in temp:
+        if j!=-1:
+            input_graph[i].append(j)
+
+flag= True
+
+# 9. 체크리스트가 모두 체크될때까지 반복한다.
+while flag:
+    idx=0
+    for i in input_graph:
+
+		# 10. 연결리스트의 인덱스의 길이가 0인 것과 체크리스트를 이용하여 인접차수가 0인 과목A를 찾는다.
+        if len(i)==0 and check_list[idx]==0:
+        
+        	# 11. 체크리스트에서 과목A를 체크한다.
+            check_list[idx]=1
+            
+            # 12. 과목A의 최소 시간을 연결리스트d의 정보와 리스트c의 정보를 합하여 리스트e에 저장한다.
+            if len(find_min_list[idx])==0:
+                result_time_list[idx]=time_list[idx]
+            else:
+                result_time_list[idx]=max(find_min_list[idx])+time_list[idx]
+
+            iidx=0
+            for j in input_graph:
+                if idx in j:
+                	# 13. 연결리스트a에서 과목A의 정보를 지운다.
+                    input_graph[iidx].pop(j.index(idx)) 
+                    
+                    # 14. 과목A의 최소 시간을 지웠던 연결리스트d의 인덱스에 저장한다.  
+                    find_min_list[iidx].append(result_time_list[idx])
+
+                iidx+=1
+
+        idx+=1
+
+    if 0 in check_list:
+        continue
+    else:
+        flag=False
+
+# 15. 출력한다.
+for i in range(1,N+1):
+    print(result_time_list[i])
+    
+    
+    
+    
+저자가 구현한 코드 :
+
+from collections import deque
+import copy
+
+# 노드의 개수 입력받기
+v = int(input())
+# 모든 노드에 대한 진입차수는 0으로 초기화
+indegree = [0] * (v + 1)
+# 각 노드에 연결된 간선 정보를 담기 위한 연결 리스트(그래프) 초기화
+graph = [[] for i in range(v + 1)]
+# 각 강의 시간을 0으로 초기화
+time = [0] * (v + 1)
+
+# 방향 그래프의 모든 간선 정보를 입력받기
+for i in range(1, v + 1):
+    data = list(map(int, input().split()))
+    time[i] = data[0] # 첫 번째 수는 시간 정보를 담고 있음
+    for x in data[1:-1]:
+        indegree[i] += 1
+        graph[x].append(i)
+
+# 위상 정렬 함수
+def topology_sort():
+    result = copy.deepcopy(time) # 알고리즘 수행 결과를 담을 리스트
+    q = deque() # 큐 기능을 위한 deque 라이브러리 사용
+
+    # 처음 시작할 때는 진입차수가 0인 노드를 큐에 삽입
+    for i in range(1, v + 1):
+        if indegree[i] == 0:
+            q.append(i)
+
+    # 큐가 빌 때까지 반복
+    while q:
+        # 큐에서 원소 꺼내기
+        now = q.popleft()
+        # 해당 원소와 연결된 노드들의 진입차수에서 1 빼기
+        for i in graph[now]:
+            result[i] = max(result[i], result[now] + time[i])
+            indegree[i] -= 1
+            # 새롭게 진입차수가 0이 되는 노드를 큐에 삽입
+            if indegree[i] == 0:
+                q.append(i)
+
+    # 위상 정렬을 수행한 결과 출력
+    for i in range(1, v + 1):
+        print(result[i])
+
+topology_sort()
+
+
+
+
+피드백 :
+
+저자의 코드가 더 직관적이고 간단하다. 
+
+저자의 코드 중에서 최소시간 리스트를 갱신하는 코드가 인상적이었다.
+
+나중에 구현할때 사용해봐야겠다.
+
+for i in graph[now]:
+
+	result[i] = max( result[i] , result[now] + time[i] )
+	
+
+리스트의 값은 복제해야 할 때는 deepcopy( ) 함수를 사용하면 된다고 하니 숙지해두자.
+
+(파이썬의 경우 리스트는 reference이므로 함수를 이용하여 복제해야한다.)
+ 
+import copy
+
+time=[ 1 for _ in range(10)]
+
+result = copy.deepcopy(time)
+ 
+
+
+
+
+
+'''
+
+
+
+
 
 
 
