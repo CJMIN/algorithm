@@ -52,6 +52,6 @@
 
 ## 8. 그래프 이론
 
-[개념]
+[개념](https://to-remember-for-100-years.tistory.com/58)
 
 [코드](https://github.com/CJMIN/algorithm/blob/master/Various_graph_algorithms.py)
