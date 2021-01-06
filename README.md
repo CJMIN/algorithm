@@ -2,10 +2,7 @@
 
 
 
-
-## 0. 코딩 테스트 개요
-
-[개념](https://to-remember-for-100-years.tistory.com/35)
+# 
                   
 ## 1. 그리디
 
