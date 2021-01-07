@@ -46,7 +46,7 @@
 
 [코드](https://github.com/CJMIN/algorithm/blob/master/shortest_path.py)
 
-## 8. 그래프 이론
+## 8. 그래프 이론 (서로소 집합, 크루스칼, 위상정렬)
 
 [개념](https://to-remember-for-100-years.tistory.com/58)
 
